@@ -210,7 +210,7 @@ local function detectExecutor()
     local executor = "Unknown"
     if syn then executor = "Synapse X"
     elseif KRNL_LOADED then executor = "KRNL"
-    elseif fluxus then executor = "Fluxus"
+    elseif Delta X then executor = "Detal X"
     elseif secure_load then executor = "Sentinel"
     elseif getexecutorname then executor = getexecutorname()
     elseif identifyexecutor then executor = identifyexecutor() end
