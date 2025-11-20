@@ -569,11 +569,32 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    local CoreGui = game:GetService("CoreGui")  -- 👈 thêm nhiều tên nếu muốn xoá nhiều người
+    local CoreGui = game:GetService("CoreGui")
 
     while task.wait(0.05) do
         ---------------------------
         -- XÓA TRONG SETTINGS MENU
         ---------------------------
-        local playersFolder = CoreGui:FindFirstChild("RobloxGui")
-         
+        local robloxGui = CoreGui:FindFirstChild("RobloxGui")
+        if robloxGui then
+
+            -- Xóa settings (Menu Setting khi bấm ESC)
+            local settings = robloxGui:FindFirstChild("SettingsClippingShield")
+            if settings then
+                settings:Destroy()
+            end
+
+            -- Xóa PlayerList (Danh sách người chơi)
+            local playerList = robloxGui:FindFirstChild("PlayerListMaster")
+            if playerList then
+                playerList:Destroy()
+            end
+
+            -- Xóa TopBar (thanh trên cùng)
+            local topBar = robloxGui:FindFirstChild("TopBar")
+            if topBar then
+                topBar:Destroy()
+            end
+        end
+    end
+end)
