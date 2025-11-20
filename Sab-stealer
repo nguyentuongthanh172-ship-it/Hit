@@ -1,7 +1,6 @@
-setclipboard("https://discord.gg/67A7N7Tm4")
 game:GetService("StarterGui"):SetCore("SendNotification", {
-    Title = "Discord Invite Copied!",
-    Text = "Join For Support!",
+    Title = "Script by dev team",
+    Text = "nhập link server vip vào để tránh bị lỗi khi sử dụng",
     Duration = 5
 })
 
